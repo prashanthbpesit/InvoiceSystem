@@ -17,14 +17,14 @@ public class CommonMethods {
      * @param inDateStr : This is the String variable of date
      * @return : This method will return local date
      */
-    public static LocalDate converStringToDate(String inDateStr){
+    public static LocalDate converStringToDate(String inDateStr) {
         LocalDate date = null;
-        try{
+        try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             date = LocalDate.parse(inDateStr, formatter);
-            log.info("input date conversion,  date:"+date);
+            log.info("input date conversion,  date:" + date);
         } catch (Exception Ex) {
-            log.info("Exception in converStringToDate,  Error message:"+Ex.getMessage());
+            log.info("Exception in converStringToDate,  Error message:" + Ex.getMessage());
         }
         return date;
     }

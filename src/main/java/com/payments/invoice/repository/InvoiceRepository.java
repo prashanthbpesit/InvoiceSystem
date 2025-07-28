@@ -16,8 +16,9 @@ public interface InvoiceRepository extends JpaRepository<InvoiceDTO, Long> {
 
     /**
      * This is the method used to interact with database
+     *
      * @param paidamount : To update Paid amount
-     * @param id : To update particular invoice id
+     * @param id         : To update particular invoice id
      * @return
      */
     @Modifying
@@ -27,10 +28,11 @@ public interface InvoiceRepository extends JpaRepository<InvoiceDTO, Long> {
 
     /**
      * This method to update overdue details to database
-     * @param latefee : To update late fee details
-     * @param duedays : to update overdue numbers
+     *
+     * @param latefee    : To update late fee details
+     * @param duedays    : to update overdue numbers
      * @param paidamount : To update Paid amount
-     * @param id : To update particular invoice id
+     * @param id         : To update particular invoice id
      * @return
      */
     @Modifying

@@ -31,35 +31,37 @@ public class InvoiceServices {
 
     /**
      * This service method to create invoice details
+     *
      * @param invoice : This object to update invoice amount and due date
      * @return : this will return the invoice id details
      */
     public InvoiceId createInvoice(InvoiceDetails invoice) {
         InvoiceId invoiceId = new InvoiceId();
-        try{
-        InvoiceDTO invoiceDTO = new InvoiceDTO();
-        invoiceDTO.setInvoiceamount(Double.valueOf(invoice.getAmount()));
-        LocalDate date = CommonMethods.converStringToDate(invoice.getDue_date());
-        invoiceDTO.setDuedate(date);
-        invoiceDTO.setStatus("Pending");
-        invoiceDTO.setLatefee(0.0);
-        invoiceDTO.setOverduedays(0);
-        invoiceDTO.setPaidamount(0.0);
-        InvoiceDTO savedInvoiceDTO = repo.save(invoiceDTO);
-        invoiceId.setId(String.valueOf(savedInvoiceDTO.getId()));
+        try {
+            InvoiceDTO invoiceDTO = new InvoiceDTO();
+            invoiceDTO.setInvoiceamount(Double.valueOf(invoice.getAmount()));
+            LocalDate date = CommonMethods.converStringToDate(invoice.getDue_date());
+            invoiceDTO.setDuedate(date);
+            invoiceDTO.setStatus("Pending");
+            invoiceDTO.setLatefee(0.0);
+            invoiceDTO.setOverduedays(0);
+            invoiceDTO.setPaidamount(0.0);
+            InvoiceDTO savedInvoiceDTO = repo.save(invoiceDTO);
+            invoiceId.setId(String.valueOf(savedInvoiceDTO.getId()));
         } catch (Exception Ex) {
-            loggerInvoiceServices.error("Error in createInvoice: "+Ex.getMessage());
+            loggerInvoiceServices.error("Error in createInvoice: " + Ex.getMessage());
         }
         return invoiceId;
     }
 
     /**
      * This service method to get all the invoice details.
+     *
      * @return : Method will return the list of objects
      */
-    public List<InvoiceDetails> getInvoiceDetails(){
+    public List<InvoiceDetails> getInvoiceDetails() {
         List<InvoiceDetails> lstInvoiceDetails = new ArrayList<>();
-        try{
+        try {
             List<InvoiceDTO> lstInvoiceDTO = repo.findAll();
             lstInvoiceDetails = lstInvoiceDTO.stream().map(dto -> {
                 InvoiceDetails entity = new InvoiceDetails();
@@ -72,44 +74,46 @@ public class InvoiceServices {
                 entity.setLatefee(String.valueOf(dto.getLatefee()));
                 return entity;
             }).collect(Collectors.toList());
-        }catch (Exception Ex){
-            loggerInvoiceServices.error("Error in getInvoiceDetails: "+Ex.getMessage());
+        } catch (Exception Ex) {
+            loggerInvoiceServices.error("Error in getInvoiceDetails: " + Ex.getMessage());
         }
         return lstInvoiceDetails;
     }
 
     /**
      * This service method is used to process invoice payment
+     *
      * @param amount : the double variable of invoice amount
-     * @param id : the integer variable of id
+     * @param id     : the integer variable of id
      * @return : The method will return the string variables containing succcess or failure cases.
      */
-    public String invoicePayment(double amount, int id){
+    public String invoicePayment(double amount, int id) {
         String message = "Successfully Paid.";
-        try{
+        try {
             repo.payFullAmount(amount, id);
         } catch (Exception Ex) {
             message = "Couldnt pay it. Please try again.";
-            loggerInvoiceServices.error("Error in invoicePayment: "+Ex.getMessage());
+            loggerInvoiceServices.error("Error in invoicePayment: " + Ex.getMessage());
         }
         return message;
     }
 
     /**
      * This service method is used to process over due calcultion of invoice payment
+     *
      * @param latefee : the double variable of late fee amount
      * @param duedays : the integer variable of due days calculations
      * @param amount  : the double variable of amount
-     * @param id : the integer variable of id
+     * @param id      : the integer variable of id
      * @return : The method will return the string variables containing succcess or failure cases.
      */
-    public String overDues(double latefee, int duedays, double amount,  int id){
+    public String overDues(double latefee, int duedays, double amount, int id) {
         String message = "Successfully Paid for the Overdues.";
-        try{
+        try {
             repo.overDuePays(latefee, duedays, amount, id);
         } catch (Exception Ex) {
             message = "Couldnt pay it. Please try again.";
-            loggerInvoiceServices.error("Error in invoicePayment: "+Ex.getMessage());
+            loggerInvoiceServices.error("Error in invoicePayment: " + Ex.getMessage());
         }
         return message;
     }
